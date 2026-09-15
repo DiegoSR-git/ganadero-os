@@ -123,10 +123,14 @@ export default function RegistrarEventoDialog({ open, onOpenChange, animalId, on
       toast({ title: "No se pudo guardar", description: error.message, variant: "destructive" });
       return;
     }
-    const res = data as { duplicado?: boolean; ingreso_id?: string | null } | null;
+    const res = data as { duplicado?: boolean; ingreso_id?: string | null; gasto_id?: string | null } | null;
     toast({
       title: res?.duplicado ? "Ya estaba registrado" : "Evento registrado",
-      description: res?.ingreso_id ? "Animal dado de baja e ingreso de la venta registrado." : EVENTO_LABEL[tipo] ?? tipo,
+      description: res?.ingreso_id
+        ? "Animal dado de baja e ingreso de la venta registrado."
+        : res?.gasto_id
+          ? "Gasto de la compra registrado en Economía."
+          : EVENTO_LABEL[tipo] ?? tipo,
     });
     setClaveEnvio(crypto.randomUUID());
     onOpenChange(false);

@@ -121,6 +121,7 @@ DECLARE
   _existente uuid;
   _estado text;
   _ingreso_id uuid;
+  _gasto_id uuid;
   _meta jsonb := COALESCE(_metadata, '{}'::jsonb);
 BEGIN
   IF _explotacion_id IS NULL THEN RAISE EXCEPTION 'Falta la explotación'; END IF;
@@ -198,11 +199,33 @@ BEGIN
           CASE WHEN _idempotency_key IS NULL THEN NULL ELSE _idempotency_key || ':ingreso' END
         ) RETURNING id INTO _ingreso_id;
       END IF;
+    ELSIF _tipo_evento = 'compra' AND _importe IS NOT NULL AND _importe > 0 THEN
+      INSERT INTO public.expenses (
+        explotacion_id, fecha, proveedor, concepto, categoria,
+        base_imponible, iva_porcentaje, iva_importe, total,
+        origen, lote_id, animal_id, observaciones, idempotency_key
+      ) VALUES (
+        _explotacion_id, _fecha, NULL, 'Compra de ' || _a.crotal, 'compra_animales',
+        round((_importe / 1.21)::numeric, 2), 21, round((_importe - (_importe / 1.21))::numeric, 2), _importe,
+        _origen, COALESCE(_lote_id, _a.lote_id), _animal_id, _descripcion,
+        CASE WHEN _idempotency_key IS NULL THEN NULL ELSE _idempotency_key || ':gasto' END
+      ) RETURNING id INTO _gasto_id;
     END IF;
+  ELSIF _tipo_evento = 'compra' AND _importe IS NOT NULL AND _importe > 0 THEN
+    INSERT INTO public.expenses (
+      explotacion_id, fecha, proveedor, concepto, categoria,
+      base_imponible, iva_porcentaje, iva_importe, total,
+      origen, lote_id, animal_id, observaciones, idempotency_key
+    ) VALUES (
+      _explotacion_id, _fecha, NULL, 'Compra de animal', 'compra_animales',
+      round((_importe / 1.21)::numeric, 2), 21, round((_importe - (_importe / 1.21))::numeric, 2), _importe,
+      _origen, _lote_id, NULL, _descripcion,
+      CASE WHEN _idempotency_key IS NULL THEN NULL ELSE _idempotency_key || ':gasto' END
+    ) RETURNING id INTO _gasto_id;
   END IF;
 
   RETURN jsonb_build_object(
-    'ok', true, 'duplicado', false, 'evento_id', _evento_id, 'ingreso_id', _ingreso_id
+    'ok', true, 'duplicado', false, 'evento_id', _evento_id, 'ingreso_id', _ingreso_id, 'gasto_id', _gasto_id
   );
 END; $$;
 
