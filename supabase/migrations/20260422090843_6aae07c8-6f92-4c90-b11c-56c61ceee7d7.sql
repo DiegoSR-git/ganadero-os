@@ -1,0 +1,1 @@
+UPDATE invoices SET pdf_path = NULL WHERE numero = '2026-0009';

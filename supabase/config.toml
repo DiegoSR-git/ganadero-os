@@ -1,0 +1,27 @@
+project_id = "xwagacfldlwobyjfpxci"
+
+[functions.wa-webhook]
+verify_jwt = false
+
+[functions.wa-process-message]
+verify_jwt = false
+
+[functions.ocr-extract]
+verify_jwt = true
+
+[functions.stripe-create-checkout]
+verify_jwt = false
+
+[functions.stripe-create-checkout-gestoria]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.registration-status]
+verify_jwt = false
+
+[functions.send-gestoria-email]
+verify_jwt = false
+[functions.ganadero-ai]
+verify_jwt = true

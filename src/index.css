@@ -1,0 +1,132 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* GANADERO OS — Design System
+   Verde oscuro + oliva suave + tonos tierra + crema. Todos los colores en HSL.
+*/
+
+@layer base {
+  :root {
+    --background: 45 28% 97%;
+    --foreground: 155 22% 12%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 155 22% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 155 22% 12%;
+
+    /* Verde oscuro ganadero */
+    --primary: 156 38% 22%;
+    --primary-foreground: 45 40% 97%;
+    --primary-soft: 150 30% 92%;
+    --primary-strong: 158 45% 14%;
+
+    /* Oliva suave */
+    --secondary: 78 22% 92%;
+    --secondary-foreground: 90 25% 22%;
+
+    --muted: 45 18% 94%;
+    --muted-foreground: 150 8% 42%;
+
+    --accent: 82 28% 88%;
+    --accent-foreground: 90 35% 22%;
+
+    --olive: 82 30% 42%;
+    --olive-foreground: 0 0% 100%;
+    --earth: 28 35% 45%;
+    --earth-foreground: 0 0% 100%;
+
+    --destructive: 4 68% 48%;
+    --destructive-foreground: 0 0% 100%;
+
+    --warning: 32 88% 48%;
+    --warning-foreground: 30 50% 14%;
+
+    --success: 150 45% 34%;
+    --success-foreground: 0 0% 100%;
+
+    --info: 200 65% 40%;
+    --info-foreground: 0 0% 100%;
+
+    --border: 45 16% 88%;
+    --input: 45 16% 88%;
+    --ring: 156 38% 30%;
+
+    --radius: 0.75rem;
+
+    --sidebar-background: 158 34% 12%;
+    --sidebar-foreground: 45 22% 92%;
+    --sidebar-primary: 82 34% 52%;
+    --sidebar-primary-foreground: 158 40% 10%;
+    --sidebar-accent: 158 28% 18%;
+    --sidebar-accent-foreground: 45 30% 96%;
+    --sidebar-border: 158 26% 20%;
+    --sidebar-ring: 82 34% 52%;
+
+    --gradient-hero: linear-gradient(135deg, hsl(156 38% 22%), hsl(90 30% 30%));
+    --gradient-soft: linear-gradient(180deg, hsl(45 28% 98%), hsl(45 18% 95%));
+    --shadow-card: 0 1px 2px 0 hsl(155 20% 15% / 0.05), 0 1px 3px -1px hsl(155 20% 15% / 0.06);
+    --shadow-elevated: 0 12px 32px -14px hsl(158 45% 14% / 0.22);
+  }
+
+  .dark {
+    --background: 158 26% 8%;
+    --foreground: 45 22% 94%;
+    --card: 158 24% 11%;
+    --card-foreground: 45 22% 94%;
+    --popover: 158 24% 11%;
+    --popover-foreground: 45 22% 94%;
+    --primary: 82 34% 52%;
+    --primary-foreground: 158 40% 10%;
+    --primary-soft: 158 26% 18%;
+    --primary-strong: 82 40% 62%;
+    --secondary: 158 20% 16%;
+    --secondary-foreground: 45 22% 94%;
+    --muted: 158 20% 16%;
+    --muted-foreground: 45 12% 65%;
+    --accent: 158 22% 18%;
+    --accent-foreground: 82 40% 62%;
+    --olive: 82 34% 52%;
+    --olive-foreground: 158 40% 10%;
+    --earth: 28 32% 52%;
+    --earth-foreground: 0 0% 100%;
+    --destructive: 4 66% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --warning: 32 85% 52%;
+    --warning-foreground: 30 50% 12%;
+    --success: 150 45% 42%;
+    --success-foreground: 0 0% 100%;
+    --info: 200 60% 48%;
+    --info-foreground: 0 0% 100%;
+    --border: 158 20% 18%;
+    --input: 158 20% 18%;
+    --ring: 82 34% 52%;
+    --sidebar-background: 158 34% 9%;
+    --sidebar-foreground: 45 22% 92%;
+    --sidebar-primary: 82 34% 52%;
+    --sidebar-primary-foreground: 158 40% 10%;
+    --sidebar-accent: 158 26% 15%;
+    --sidebar-accent-foreground: 45 30% 96%;
+    --sidebar-border: 158 26% 17%;
+    --sidebar-ring: 82 34% 52%;
+  }
+}
+
+
+@layer base {
+  * { @apply border-border; }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  h1,h2,h3,h4 { @apply font-semibold tracking-tight; }
+}
+
+@layer utilities {
+  .bg-gradient-hero { background: var(--gradient-hero); }
+  .bg-gradient-soft { background: var(--gradient-soft); }
+  .shadow-card { box-shadow: var(--shadow-card); }
+  .shadow-elevated { box-shadow: var(--shadow-elevated); }
+}

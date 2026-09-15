@@ -1,0 +1,2 @@
+ALTER TABLE public.ai_action_log ADD COLUMN IF NOT EXISTS idempotency_key text;
+CREATE UNIQUE INDEX IF NOT EXISTS ai_action_log_idem_uidx ON public.ai_action_log (idempotency_key) WHERE idempotency_key IS NOT NULL;

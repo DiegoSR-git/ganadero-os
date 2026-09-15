@@ -1,0 +1,68 @@
+INSERT INTO public.especies (codigo, nombre, dias_gestacion, orden, activa) VALUES
+('bovino', 'Bovino', 283, 1, true),
+('ovino', 'Ovino', 150, 2, true),
+('caprino', 'Caprino', 150, 3, true),
+('porcino', 'Porcino', 114, 4, true),
+('equino', 'Equino', 330, 5, true)
+ON CONFLICT (codigo) DO NOTHING;
+
+INSERT INTO public.razas (especie_codigo, nombre, categoria, autoctona, activa) VALUES
+-- Bovino
+('bovino', 'Limusina', 'carne', false, true),
+('bovino', 'Charolesa', 'carne', false, true),
+('bovino', 'Asturiana de los Valles', 'carne', true, true),
+('bovino', 'Avileña-Negra Ibérica', 'carne', true, true),
+('bovino', 'Morucha', 'carne', true, true),
+('bovino', 'Retinta', 'carne', true, true),
+('bovino', 'Parda Alpina', 'carne', false, true),
+('bovino', 'Simmental', 'carne', false, true),
+('bovino', 'Blonde d''Aquitaine', 'carne', false, true),
+('bovino', 'Rubia Gallega', 'carne', true, true),
+('bovino', 'Cachena', 'carne', true, true),
+('bovino', 'Maronesa', 'carne', true, true),
+('bovino', 'Mertolenga', 'carne', true, true),
+('bovino', 'Holstein', 'leche', false, true),
+('bovino', 'Frisona', 'leche', false, true),
+('bovino', 'Parda de Montaña', 'mixta', true, true),
+('bovino', 'Otra/Cruce', 'mixta', false, true),
+-- Ovino
+('ovino', 'Merina', 'leche/carne', true, true),
+('ovino', 'Rasa Aragonesa', 'carne', true, true),
+('ovino', 'Manchega', 'leche', true, true),
+('ovino', 'Lacaune', 'leche', false, true),
+('ovino', 'Assaf', 'leche', false, true),
+('ovino', 'Churra', 'leche', true, true),
+('ovino', 'Castellana', 'carne', true, true),
+('ovino', 'Ojalada', 'carne', true, true),
+('ovino', 'Suffolk', 'carne', false, true),
+('ovino', 'Dorper', 'carne', false, true),
+('ovino', 'Otra/Cruce', 'mixta', false, true),
+-- Caprino
+('caprino', 'Murciano-Granadina', 'leche', true, true),
+('caprino', 'Malagueña', 'leche', true, true),
+('caprino', 'Alpina', 'leche', false, true),
+('caprino', 'Saanen', 'leche', false, true),
+('caprino', 'Florida', 'leche', true, true),
+('caprino', 'Payoya', 'leche/carne', true, true),
+('caprino', 'Blanca Celtibérica', 'carne', true, true),
+('caprino', 'Verata', 'carne', true, true),
+('caprino', 'Otra/Cruce', 'mixta', false, true),
+-- Porcino
+('porcino', 'Ibérico', 'carne', true, true),
+('porcino', 'Duroc', 'carne', false, true),
+('porcino', 'Landrace', 'carne', false, true),
+('porcino', 'Large White', 'carne', false, true),
+('porcino', 'Pietrain', 'carne', false, true),
+('porcino', 'Iberico Cebo de Campo', 'carne', true, true),
+('porcino', 'Iberico Bellota', 'carne', true, true),
+('porcino', 'Otra/Cruce', 'mixta', false, true),
+-- Equino
+('equino', 'Pura Raza Española', 'deporte/trabajo', true, true),
+('equino', 'Pura Raza Árabe', 'deporte', false, true),
+('equino', 'Anglo-Árabe', 'deporte', false, true),
+('equino', 'Hispano-Árabe', 'deporte', true, true),
+('equino', 'Caballo de Deporte Español', 'deporte', true, true),
+('equino', 'Asturcón', 'trabajo', true, true),
+('equino', 'Losino', 'trabajo', true, true),
+('equino', 'Otra/Cruce', 'mixta', false, true)
+ON CONFLICT (especie_codigo, lower(nombre)) DO NOTHING;

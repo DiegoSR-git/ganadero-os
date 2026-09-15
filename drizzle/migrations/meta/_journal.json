@@ -1,0 +1,90 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1789373578646,
+      "tag": "0000_ganadero_os_core",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789374225316,
+      "tag": "0001_documentos_storage_policies",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789374868329,
+      "tag": "0002_ai_assistant_core",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1789375630488,
+      "tag": "0003_explotaciones_whatsapp",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1789376046665,
+      "tag": "0004_pilot_v1_core",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1789376079150,
+      "tag": "0005_ai_action_idempotency",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1789376535121,
+      "tag": "0006_restrict_pilot_metrics",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1789377682041,
+      "tag": "0007_explotaciones_select_own_policy",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1789468176053,
+      "tag": "0008_catalogo_especies_razas_y_parto",
+      "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1789469887170,
+      "tag": "0009_grants_catalogo_ganado",
+      "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1789470495276,
+      "tag": "0010_seed_especies_razas",
+      "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1789471089655,
+      "tag": "0011_integridad_y_atomicidad",
+      "breakpoints": true
+    }
+  ]
+}
