@@ -1,247 +1,336 @@
-# Papeleo Fácil WhatsApp 🇪🇸
+# GanaderOS
 
-Panel interno para asesorías y autónomos de pueblo. **Los clientes finales NO entran a la web**: interactúan por WhatsApp con comandos simples (`FACTURA`, `GASTO`, `COBRO`, `RESUMEN`, `GESTORIA`, `AYUDA`). El operador usa el panel para revisar, generar PDFs y preparar el envío a la gestoría.
+Software de gestion ganadera para explotaciones en Espana. Permite llevar desde el movil el control diario de animales, lotes, fincas, partos, tratamientos, gastos, ingresos, documentos y tareas, con registro por web, WhatsApp e IA.
 
-> **Aviso legal**: Esta app **no sustituye a la gestoría**. Los cálculos de IVA son orientativos. La presentación fiscal final corresponde a tu gestor o asesor fiscal.
+El frontend esta desplegado como SPA estatica en Hostinger. El backend de produccion es Supabase:
+
+- **Supabase project id**: `xwagacfldlwobyjfpxci`
+- **API base**: `https://xwagacfldlwobyjfpxci.supabase.co`
 
 ## Stack
 
-- **Frontend**: React 18 + Vite + Tailwind + shadcn/ui (TypeScript)
-- **Backend**: Lovable Cloud (Supabase) — PostgreSQL + Auth + Storage + Edge Functions
-- **PDF**: jsPDF · **ZIP**: JSZip · **Validación**: Zod · **Gráficos**: Recharts
+- **Frontend**: React 18 + Vite + TypeScript
+- **UI**: Tailwind CSS + shadcn/ui + Radix UI + lucide-react
+- **Estado/datos**: TanStack Query + Supabase JS
+- **Backend**: Supabase Auth, PostgreSQL, RLS, Storage y Edge Functions
+- **Pagos**: Stripe Checkout + webhooks
+- **IA**: Edge Function `ganadero-ai` para chat, voz y fotos
+- **Documentos**: Storage privado de Supabase, jsPDF, JSZip y exportaciones CSV
+- **Tests/build**: Vitest, ESLint, Vite build
 
-## Módulos incluidos
+## Modulo Ganadero
 
-1. Multiempresa con RLS estricto por `company_id`
-2. Clientes por empresa
-3. Facturas + PDF profesional + descarga + export CSV
-4. Gastos y tickets (8 categorías) + export CSV
-5. Cobros pendientes con días vencidos, alertas y export CSV
-6. Resumen mensual + trimestral con **PDF resumen descargable**
-7. Documentos para gestoría (export ZIP con PDFs + CSV + resumen)
-8. Inbox WhatsApp + parser de comandos
-9. **Simulador de webhook (`/demo-webhook`)** para probar mensajes sin Meta
-10. OCR (stub listo para conectar Vision / Mindee / OpenAI)
-11. Dashboard con KPIs, gráfico 6 meses y top clientes
-12. Roles `superadmin` / `gestor` / `cliente_empresa`, RLS, audit log
-13. Datos demo realistas (3 empresas, 18 clientes, 32 facturas, 32 gastos, 20 mensajes WA)
+Rutas principales:
 
-## Roles y acceso
+| Ruta | Funcion |
+|---|---|
+| `/` | Landing publica optimizada para captacion |
+| `/auth` | Login y alta con pago Stripe |
+| `/app` | Inicio de la explotacion |
+| `/animales` | Listado, busqueda, filtros, importacion y alta de animales |
+| `/animales/:id` | Ficha completa del animal |
+| `/lotes` | Gestion de lotes |
+| `/fincas` | Fincas y parcelas |
+| `/economia` | Gastos, ingresos y balance mensual |
+| `/documentos` | Archivo documental por explotacion y animal |
+| `/tareas` | Tareas pendientes y seguimiento |
+| `/asistente` | Asistente IA con texto, voz y fotos |
+| `/configuracion` | Datos de explotacion |
+| `/ayuda` | Ayuda funcional |
+| `/panel-piloto` | Metricas internas de piloto |
 
-Tras crear cuenta, un superadmin asocia el usuario a su empresa:
+## Funcionalidad GanaderOS
 
-```sql
--- Cliente de una empresa concreta
-INSERT INTO public.user_roles (user_id, role, company_id)
-VALUES ('<uuid_usuario>', 'cliente_empresa', '<uuid_empresa>');
+- Gestion de varias explotaciones por usuario.
+- Alta y edicion de animales por crotal.
+- Crotales pendientes con asignacion posterior.
+- Clasificacion funcional por especie, sexo y edad.
+- Lotes, fincas y parcelas.
+- Eventos por animal: nacimiento, parto, aborto, cubricion, inseminacion, gestacion, tratamiento, vacuna, incidencia, movimiento, pesaje, revision, compra, venta, cambio de lote, cambio de parcela y observacion.
+- Registro atomico de partos y creacion de crias desde funcion SQL.
+- Movimiento masivo de animales entre lotes.
+- Gastos ganaderos con IVA, proveedor, lote y animal asociado.
+- Ingresos por venta de animales, subvenciones, seguros u otros conceptos.
+- Documentos privados por explotacion: facturas, tickets, recetas, guias, certificados, PAC, contratos y otros.
+- Tareas con prioridad, fecha limite y estado.
+- Feedback de usuarios y eventos de producto para piloto.
+- Asistente IA que consulta datos reales y propone acciones confirmables.
 
--- Superadmin (ve todas las empresas)
-INSERT INTO public.user_roles (user_id, role) VALUES ('<uuid_usuario>', 'superadmin');
-```
+## Backend Supabase
 
-Empresas demo disponibles:
-- `11111111-1111-1111-1111-111111111111` — Construcciones Pérez (+34620111222)
-- `22222222-2222-2222-2222-222222222222` — Bar La Plaza (+34620333444)
-- `33333333-3333-3333-3333-333333333333` — Tienda Mateo (+34620555666)
+El backend vive principalmente en migraciones SQL y Edge Functions.
 
-## Comandos WhatsApp
+### Tablas ganaderas principales
 
-| Comando | Ejemplo | Acción |
-|---|---|---|
-| `FACTURA` | `FACTURA 350 reparar tejado a Juan` | Crea factura borrador |
-| `GASTO` | `GASTO gasoil 65` | Crea gasto pendiente |
-| `COBRO` | `COBRO 2026-0014` | Marca como cobrada |
-| `RESUMEN` | `RESUMEN marzo` | Consulta en panel |
-| `GESTORIA` | `GESTORIA trimestre 1` | Marca trimestre listo |
-| `AYUDA` | `AYUDA` | Lista de comandos |
+- `explotaciones`
+- `explotacion_members`
+- `fincas`
+- `parcelas`
+- `lotes`
+- `animales`
+- `eventos_animales`
+- `tareas`
+- `documentos`
+- `ingresos`
+- `ai_action_log`
+- `ai_sessions`
+- `ai_feature_flags`
+- `feedback`
+- `product_events`
+- `actividad_log`
+- `especies`
+- `razas`
 
-Mensajes incompletos quedan `pendiente` para revisión manual en **Inbox**.
+### Tablas heredadas de empresa/facturacion
 
-## 🔌 Conectar WhatsApp Cloud API (paso a paso)
+El proyecto conserva modulos de facturacion y gestoria usados por el alta, Stripe, WhatsApp y el panel administrativo:
 
-### URLs de tus edge functions
-- **Webhook**: `https://ubsdjhrtrgxjcbbjdawe.supabase.co/functions/v1/wa-webhook`
-- **Process**: `https://ubsdjhrtrgxjcbbjdawe.supabase.co/functions/v1/wa-process-message`
+- `companies`
+- `user_roles`
+- `profiles`
+- `clients`
+- `invoices`
+- `invoice_lines`
+- `expenses`
+- `wa_messages`
+- `monthly_closures`
+- `audit_log`
+- `gestorias`
+- `gestoria_empresa_links`
+- `pending_registrations`
+- `stripe_events`
 
-### Pasos en Meta for Developers
+## Seguridad y permisos
 
-1. Entra en https://developers.facebook.com/apps y crea una app tipo **Business**.
-2. Añade el producto **WhatsApp** → "Configuración de la API".
-3. Apunta el **Phone Number ID** y el **WhatsApp Business Account ID**.
-4. Genera un **System User Access Token** permanente (en Business Settings).
-5. En tu app, sección **Webhooks → WhatsApp Business Account**, pulsa **Configurar**:
-   - **URL de devolución de llamada**: la URL del webhook de arriba.
-   - **Token de verificación**: invéntate uno (ej. `papeleo-facil-2026`) y guárdalo, lo necesitarás como secret.
-6. Pulsa **Verificar y guardar**. Meta hará un GET de verificación; el webhook responde con el challenge si el token coincide.
-7. Suscríbete al campo **`messages`**.
-8. En la BBDD, edita la empresa y pon `whatsapp_number = '+34XXXXXXXXX'` (el número Meta exacto, con prefijo `+`).
-9. Configura los secrets en Lovable Cloud:
-   - `WHATSAPP_VERIFY_TOKEN` = el token que inventaste en el paso 5
-   - `WHATSAPP_PHONE_NUMBER_ID` = del paso 3
-   - `WHATSAPP_ACCESS_TOKEN` = del paso 4
-10. Envía un mensaje de prueba al número desde tu móvil → aparecerá en el **Inbox** y se procesará automáticamente.
+La app se apoya en Supabase RLS:
 
-### Probar sin Meta
-
-Mientras configuras Meta, usa la ruta **`/demo-webhook`** del panel. Inserta mensajes simulados y los pasa por el mismo parser. Útil para demos y pruebas.
-
-## 💳 Registro con pago Stripe (flujo nuevo)
-
-El alta real **solo ocurre tras confirmación de pago** vía webhook de Stripe.
-Una empresa se crea únicamente cuando Stripe confirma la suscripción activa.
-
-### Variables de entorno (secrets en Lovable Cloud)
-
-- `STRIPE_SECRET_KEY` — clave secreta de tu cuenta Stripe (`sk_test_...` / `sk_live_...`)
-- `STRIPE_WEBHOOK_SECRET` — secret del endpoint webhook (`whsec_...`)
-- `STRIPE_PRICE_BASIC` — id del precio de la suscripción (ej. `price_1TOvfUK1FKaKxeSFcSYb1GPb`)
-
-> ⚠️ Nunca pongas estos valores en el código. Se gestionan como secrets.
-
-### Endpoints
-
-- **Crear checkout**: `POST {SUPABASE_URL}/functions/v1/stripe-create-checkout`
-  Body: `{ email, password, nombre_comercial, razon_social?, nif?, telefono?, whatsapp_number? }`
-  o reintento: `{ pending_id }`. Devuelve `{ url, pending_id }`.
-- **Webhook Stripe**: `POST {SUPABASE_URL}/functions/v1/stripe-webhook`
-  → Esta es la URL que tienes que pegar en Stripe.
-- **Estado de registro**: `GET {SUPABASE_URL}/functions/v1/registration-status?session_id=...`
-  o `?pending_id=...`. Lo usa la página `/billing/success` para mostrar la activación.
-
-### URLs concretas de este proyecto
-
-- Webhook Stripe: `https://ubsdjhrtrgxjcbbjdawe.supabase.co/functions/v1/stripe-webhook`
-- Crear checkout: `https://ubsdjhrtrgxjcbbjdawe.supabase.co/functions/v1/stripe-create-checkout`
-- Success: `/billing/success?session_id={CHECKOUT_SESSION_ID}`
-- Cancel: `/billing/cancel?pending_id=...`
-
-### Configurar el webhook en Stripe (Dashboard → Developers → Webhooks)
-
-1. Pulsa **Add endpoint**.
-2. **Endpoint URL**: `https://ubsdjhrtrgxjcbbjdawe.supabase.co/functions/v1/stripe-webhook`
-3. **Events to send** (selecciona estos 6):
-   - `checkout.session.completed`
-   - `customer.subscription.created`
-   - `customer.subscription.updated`
-   - `customer.subscription.deleted`
-   - `invoice.paid`
-   - `invoice.payment_failed`
-4. Crea el endpoint y copia el **Signing secret** (`whsec_...`) → guárdalo como `STRIPE_WEBHOOK_SECRET`.
-
-### Flujo de registro
-
-1. Usuario rellena el formulario en `/auth` (tab "Crear cuenta").
-2. El frontend llama a `stripe-create-checkout` que:
-   - guarda un `pending_registration` con `status = 'pending_payment'` y password hasheada (bcrypt) temporal,
-   - crea una sesión de Stripe Checkout en modo `subscription`,
-   - devuelve la URL.
-3. El navegador redirige a Stripe Checkout.
-4. Si el pago se confirma, Stripe llama al webhook con `checkout.session.completed` (+ eventos de subscription).
-   El webhook:
-   - crea el usuario en `auth.users` (auto-confirmado, importando el `password_hash`),
-   - crea la `companies` con `is_active = true` y los datos de la suscripción,
-   - asigna el rol `cliente_empresa`,
-   - marca el `pending_registration` como `completed` y borra la password hasheada.
-5. La página `/billing/success` consulta el estado y muestra "¡Cuenta activada!".
-6. Si el usuario cancela, `/billing/cancel` permite reintentar el pago reutilizando el mismo `pending_registration`.
-
-### Estados y acceso
-
-| `subscription_status`     | `is_active` | Acceso al panel |
-|---------------------------|-------------|-----------------|
-| `active` / `trialing`     | true        | ✅ |
-| `past_due`                | true*       | ✅ temporal — avisar al usuario |
-| `canceled` / `unpaid`     | false       | ❌ |
-| `incomplete_expired`      | false       | ❌ + purgable |
-| `legacy` (empresas previas)| true       | ✅ — sin Stripe |
-
-### Purga de registros no pagados
-
-- Cron `purge_expired_registrations_hourly` corre **cada hora** (pg_cron).
-- Borra todos los `pending_registrations` con `expires_at < now()` que no estén `completed`.
-- Por defecto `expires_at = created_at + 24h`.
-- Manual: `SELECT public.purge_expired_registrations();`
-
-### Probar en Stripe Test
-
-1. Pon `STRIPE_SECRET_KEY` con una clave `sk_test_...`.
-2. Crea el webhook en Stripe (modo Test) y guarda su `whsec_...`.
-3. Registra una cuenta nueva en `/auth`.
-4. En Checkout usa la tarjeta `4242 4242 4242 4242`, fecha futura, CVC cualquiera.
-5. Verás `/billing/success` y la cuenta quedará activada en pocos segundos.
-
-### Probar cancelación
-
-1. Inicia el registro y, en Checkout, pulsa **Back** o cierra.
-2. Te llevará a `/billing/cancel`, que ofrece **Reintentar pago**.
-3. Si no reintentas en 24h, el cron borra el registro provisional.
-
-### Probar webhooks en local con Stripe CLI
-
-```bash
-stripe listen --forward-to https://ubsdjhrtrgxjcbbjdawe.supabase.co/functions/v1/stripe-webhook
-stripe trigger checkout.session.completed
-```
-
-### Seguridad
-
-- La firma del webhook se valida con `stripe.webhooks.constructEventAsync` y `STRIPE_WEBHOOK_SECRET`.
-- Cada `event.id` se almacena en `stripe_events` para idempotencia (no procesar dos veces).
-- El password en `pending_registrations` se guarda como hash bcrypt y se borra al activar.
-- Sin pago confirmado, **no existe usuario en `auth.users` ni empresa**.
+- Las explotaciones se filtran por `user_in_explotacion(auth.uid(), explotacion_id)`.
+- El propietario se valida con `user_owns_explotacion(auth.uid(), explotacion_id)`.
+- Los documentos usan Storage privado y politicas por carpeta de explotacion.
+- Las empresas heredadas se filtran por `company_id`, roles y relacion con gestoria.
+- Las Edge Functions criticas usan `service_role`, pero validan usuario, firma o idempotencia segun el caso.
+- El asistente IA nunca ejecuta SQL generado por modelo: solo puede usar herramientas servidor definidas.
 
 ## Edge Functions
 
-- `wa-webhook` — recibe webhooks de WhatsApp Cloud API (verificación + push). `verify_jwt = false`.
-- `wa-process-message` — parser de comandos. `verify_jwt = false` (lo invoca el webhook).
-- `ocr-extract` — stub OCR. `verify_jwt = true`.
+| Function | JWT | Uso |
+|---|---:|---|
+| `ganadero-ai` | Si | Chat, voz, fotos, propuestas confirmables y consultas ganaderas |
+| `wa-webhook` | No | Webhook entrante de WhatsApp Cloud API |
+| `wa-process-message` | No | Procesamiento de comandos y adjuntos de WhatsApp |
+| `ocr-extract` | Si | OCR con Google Vision para documentos |
+| `stripe-create-checkout` | No | Alta de explotacion con pago Stripe |
+| `stripe-create-checkout-gestoria` | No | Alta de gestoria con pago Stripe |
+| `stripe-webhook` | No | Activacion de cuentas y estado de suscripciones |
+| `registration-status` | No | Consulta minima del estado de alta |
+| `send-gestoria-email` | No | Envio de documentacion a gestoria |
 
-## OCR real (opcional)
+### URLs de produccion
 
-Sustituye `supabase/functions/ocr-extract/index.ts` por una integración real (Google Vision, Mindee u OpenAI Vision). Guarda la API key como secret y léela con `Deno.env.get(...)`.
+- `https://xwagacfldlwobyjfpxci.supabase.co/functions/v1/ganadero-ai`
+- `https://xwagacfldlwobyjfpxci.supabase.co/functions/v1/wa-webhook`
+- `https://xwagacfldlwobyjfpxci.supabase.co/functions/v1/wa-process-message`
+- `https://xwagacfldlwobyjfpxci.supabase.co/functions/v1/ocr-extract`
+- `https://xwagacfldlwobyjfpxci.supabase.co/functions/v1/stripe-create-checkout`
+- `https://xwagacfldlwobyjfpxci.supabase.co/functions/v1/stripe-create-checkout-gestoria`
+- `https://xwagacfldlwobyjfpxci.supabase.co/functions/v1/stripe-webhook`
+- `https://xwagacfldlwobyjfpxci.supabase.co/functions/v1/registration-status`
+- `https://xwagacfldlwobyjfpxci.supabase.co/functions/v1/send-gestoria-email`
 
-## Validaciones
+## Variables de entorno
 
-Todos los formularios validan con **Zod** (`src/lib/validation.ts`):
-- Email con formato válido
-- NIF/CIF (8-12 caracteres alfanuméricos)
-- Teléfonos con formato internacional
-- Importes 0–1.000.000 €, IVA 0–50%
+### Frontend en Hostinger
 
-## Exportaciones
+Estas variables se usan en build time:
 
-| Pantalla | CSV | PDF |
-|---|:-:|:-:|
-| Facturas | ✅ | ✅ por factura |
-| Gastos | ✅ | — |
-| Cobros pendientes | ✅ | — |
-| Clientes | ✅ | — |
-| Empresas | ✅ | — |
-| Resumen mensual | — | ✅ resumen mensual |
-| Gestoría | ✅ (en ZIP) | ✅ todas las facturas + resumen + CSVs |
+```env
+VITE_SUPABASE_URL=https://xwagacfldlwobyjfpxci.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=...
+```
 
-CSVs llevan BOM UTF-8 y separador `;` para abrirse correctamente en Excel.
+Si se cambia cualquier `VITE_*`, hay que reconstruir y volver a subir el `dist`.
 
-## Despliegue
+### Secrets en Supabase
 
-1. Revisa que todo está en orden (build limpio, datos demo cargados).
-2. Pulsa **Publish** arriba a la derecha en Lovable.
-3. Te da una URL `*.lovable.app`. Para dominio propio: *Project Settings → Domains*.
-4. Para producción real:
-   - Añade los 3 secrets de WhatsApp Cloud API.
-   - Configura el webhook en Meta apuntando a la URL de tu edge function.
-   - Edita cada empresa y pon su `whatsapp_number` real.
-5. Para los superadmin/gestores, ejecuta los `INSERT` en `user_roles` (ver arriba).
+```env
+SUPABASE_URL=https://xwagacfldlwobyjfpxci.supabase.co
+SUPABASE_ANON_KEY=...
+SUPABASE_SERVICE_ROLE_KEY=...
 
-## Listo vs. requiere credenciales
+STRIPE_SECRET_KEY=...
+STRIPE_WEBHOOK_SECRET=...
+STRIPE_PRICE_BASIC=...
+STRIPE_PRICE_GESTORIA=...
+STRIPE_COUPON_50=...
 
-| ✅ Listo de fábrica | 🔑 Requiere credenciales externas |
-|---|---|
-| Auth email+password, multiempresa, RLS, roles | Recepción real WhatsApp (token Meta) |
-| Facturas + PDF + descarga + CSV | Envío salientes WhatsApp |
-| Gastos, cobros, resumen, gestoría | OCR real (Vision/Mindee/OpenAI) |
-| Inbox WA + parser de comandos | Email automático a gestoría |
-| Simulador `/demo-webhook` | |
-| Export ZIP mensual + CSV + PDF resumen | |
-| Dashboard con KPIs y gráficos | |
-| Datos demo realistas | |
+WHATSAPP_VERIFY_TOKEN=...
+WHATSAPP_PHONE_NUMBER_ID=...
+WHATSAPP_ACCESS_TOKEN=...
+
+GEMINI_API_KEY=...
+GROQ_API_KEY=...
+GANADERO_AI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai
+GANADERO_AI_MODEL=gemini-3.8-flash
+GANADERO_AI_VISION_MODEL=gemini-3.8-flash
+GANADERO_STT_BASE_URL=https://api.groq.com/openai/v1
+GANADERO_AI_STT_MODEL=whisper-large-v3-turbo
+
+GOOGLE_VISION_API_KEY=...
+```
+
+## Alta con Stripe
+
+1. El usuario completa el formulario de `/auth`.
+2. El frontend llama a `stripe-create-checkout`.
+3. La funcion crea o reutiliza un `pending_registration` vigente.
+4. Stripe Checkout cobra la suscripcion.
+5. Stripe llama a `stripe-webhook`.
+6. El webhook valida la firma, reclama el `event.id` en `stripe_events` y completa el registro.
+7. Se crea el usuario en Supabase Auth, la empresa base en `companies`, el rol `cliente_empresa` y el estado de suscripcion.
+8. `/billing/success` consulta `registration-status`.
+
+La explotacion ganadera se gestiona despues desde el modulo GanaderOS con `explotaciones`.
+
+## WhatsApp
+
+WhatsApp Cloud API entra por:
+
+```text
+https://xwagacfldlwobyjfpxci.supabase.co/functions/v1/wa-webhook
+```
+
+Flujo:
+
+1. Meta verifica el webhook con `WHATSAPP_VERIFY_TOKEN`.
+2. `wa-webhook` recibe mensajes, identifica empresa por numero destino y guarda en `wa_messages`.
+3. Si hay adjunto, descarga el media desde Graph API y lo sube al bucket `wa-attachments`.
+4. Lanza `wa-process-message` en segundo plano.
+5. `wa-process-message` interpreta comandos, procesa OCR/IA cuando aplica y responde por WhatsApp si hay credenciales.
+
+## Asistente IA
+
+El asistente esta en `/asistente` y llama a `ganadero-ai`.
+
+Capacidades:
+
+- Consultar resumen de explotacion.
+- Detectar incidencias, tratamientos y tareas pendientes.
+- Buscar animales por crotal.
+- Registrar gastos, ingresos, eventos, tratamientos, pesajes y tareas mediante propuestas confirmables.
+- Transcribir audio.
+- Clasificar fotos de crotales, facturas o documentos.
+
+Medidas de seguridad:
+
+- La explotacion se deriva del usuario autenticado.
+- Las acciones de escritura requieren confirmacion.
+- Las herramientas de escritura estan allowlisted.
+- Las operaciones usan claves de idempotencia para evitar duplicados.
+- Los errores internos no se exponen al usuario final.
+
+## Storage
+
+Buckets usados:
+
+- `documentos`: documentos ganaderos por explotacion.
+- `expenses`: justificantes heredados de gastos.
+- `invoices`: PDFs o documentos asociados a facturas.
+- `wa-attachments`: adjuntos recibidos por WhatsApp.
+- `logos`: logos de empresa.
+
+## SEO
+
+El SEO base esta configurado en `index.html` porque la app es una SPA Vite.
+
+Incluye:
+
+- `title` descriptivo.
+- Meta description orientada a busquedas de software ganadero.
+- Robots index/follow.
+- Open Graph completo.
+- Twitter Card.
+- Hreflang espanol.
+- JSON-LD de `SoftwareApplication`, `Organization`, `WebSite` y `FAQPage`.
+- `robots.txt` abierto a indexacion.
+
+Pendiente cuando este confirmado el dominio definitivo:
+
+1. Anadir canonical absoluto en `index.html`:
+
+```html
+<link rel="canonical" href="https://TU-DOMINIO/" />
+<meta property="og:url" content="https://TU-DOMINIO/" />
+```
+
+2. Anadir `public/sitemap.xml` con URLs absolutas del dominio real.
+3. Anadir en `public/robots.txt`:
+
+```text
+Sitemap: https://TU-DOMINIO/sitemap.xml
+```
+
+4. Registrar el dominio en Google Search Console y Bing Webmaster Tools.
+5. Enviar el sitemap cuando el dominio este publicado.
+
+Palabras clave objetivo:
+
+- software gestion ganadera
+- programa gestion ganadera
+- app para ganaderos
+- cuaderno de explotacion ganadera digital
+- gestion de animales por crotal
+- gestion de fincas y lotes ganaderos
+- control sanitario ganado
+- registro de partos ganado
+- gastos e ingresos explotacion ganadera
+- gestion ganadera por WhatsApp
+
+## Despliegue en Hostinger
+
+1. Configurar `.env.production` o variables de build con:
+
+```env
+VITE_SUPABASE_URL=https://xwagacfldlwobyjfpxci.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=...
+```
+
+2. Compilar:
+
+```bash
+npm run build
+```
+
+3. Subir el contenido de `dist/` al directorio publico de Hostinger.
+4. Asegurar fallback SPA en Apache/Hostinger con `.htaccess`.
+5. Verificar que recargar rutas como `/app`, `/animales` o `/auth` no devuelve 404.
+
+## Desarrollo local
+
+```bash
+npm install
+npm run dev
+```
+
+Scripts disponibles:
+
+```bash
+npm run build
+npm run lint
+npm run test
+npm run preview
+```
+
+## Estado de verificacion
+
+Ultima comprobacion local:
+
+```bash
+npm run build
+```
+
+Resultado: build correcto.
+
+Avisos conocidos:
+
+- `caniuse-lite` puede estar desactualizado.
+- El bundle principal supera 500 kB; conviene aplicar code splitting cuando el producto crezca.

@@ -14,16 +14,17 @@ export default function AvisoLegal() {
         <li><strong>Titular:</strong> Diego Serrano Retamosa</li>
         <li><strong>NIF:</strong> 76046662Z</li>
         <li><strong>Domicilio:</strong> C/ Paseo de Extremadura, Herguijuela (Cáceres), España</li>
-        <li><strong>Email de contacto:</strong> contacto@papeleofacil.com</li>
-        <li><strong>Sitio web:</strong> https://papeleofacil.com</li>
+        <li><strong>Email de contacto:</strong> contacto@ganaderoos.com</li>
+        <li><strong>Sitio web:</strong> https://ganaderoos.com</li>
         <li><strong>Régimen:</strong> Persona física trabajador autónomo (no inscripción en Registro Mercantil).</li>
       </ul>
 
       <h2>2. Objeto del sitio web</h2>
       <p>
         El sitio web tiene por objeto presentar y facilitar el acceso al servicio GanaderOS:
-        una plataforma SaaS para la generación, envío y gestión de facturas, gastos y cobros,
-        accesible vía web y a través de WhatsApp, dirigida a autónomos y pequeñas empresas en España.
+        una plataforma SaaS de gestión ganadera para controlar animales, lotes, fincas,
+        eventos sanitarios y reproductivos, gastos, ingresos, documentos y tareas de
+        explotaciones ganaderas en España.
       </p>
 
       <h2>3. Condiciones de uso del sitio</h2>

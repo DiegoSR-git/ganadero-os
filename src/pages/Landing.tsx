@@ -24,33 +24,33 @@ import heroImg from "@/assets/ganadero-hero.jpg";
 const features = [
   {
     icon: Beef,
-    title: "Todos tus animales, al día",
-    desc: "Crotal, raza, edad, lote y estado reproductivo. Busca cualquier animal en un segundo.",
+    title: "Gestion de animales por crotal",
+    desc: "Crotal, raza, edad, lote y estado reproductivo. Busca cualquier animal en un segundo desde tu movil.",
   },
   {
     icon: ClipboardList,
-    title: "Cada evento registrado",
-    desc: "Partos, tratamientos, pesajes, movimientos o incidencias quedan en el historial del animal.",
+    title: "Cuaderno ganadero digital",
+    desc: "Partos, tratamientos, pesajes, movimientos o incidencias quedan en el historial completo del animal.",
   },
   {
     icon: MapPinned,
     title: "Fincas, parcelas y lotes",
-    desc: "Organiza el ganado por lotes y sabe siempre en qué parcela está cada grupo.",
+    desc: "Organiza el ganado por lotes y sabe siempre en que finca o parcela esta cada grupo.",
   },
   {
     icon: HeartPulse,
-    title: "Sanidad y reproducción",
-    desc: "Tratamientos activos, vacunas, cubriciones, gestaciones y partos del mes.",
+    title: "Control sanitario y reproduccion",
+    desc: "Tratamientos activos, vacunas, cubriciones, gestaciones y partos del mes en una sola app.",
   },
   {
     icon: Wallet,
-    title: "Gastos e ingresos reales",
-    desc: "Pienso, veterinario, combustible o venta de animales, con foto del ticket y lectura automática.",
+    title: "Gastos e ingresos de la explotacion",
+    desc: "Pienso, veterinario, combustible o venta de animales, con foto del ticket y lectura automatica.",
   },
   {
     icon: FolderArchive,
-    title: "Documentos siempre a mano",
-    desc: "Guías, recetas, certificados y facturas guardados y asociados a cada animal.",
+    title: "Archivo documental ganadero",
+    desc: "Guias, recetas, certificados y facturas guardados y asociados a cada animal.",
   },
 ];
 
@@ -69,6 +69,13 @@ const incluido = [
   "Documentos y archivo digital seguro",
   "Registro por WhatsApp",
   "Sin permanencia, cancelas cuando quieras",
+];
+
+const seoBenefits = [
+  "Software de gestion ganadera para vacuno, ovino, caprino, porcino y equino.",
+  "Programa para ganaderos con animales por crotal, lotes, fincas y parcelas.",
+  "Cuaderno de explotacion ganadera digital con partos, tratamientos, vacunas y pesajes.",
+  "Control economico de gastos, ingresos y documentos de la explotacion.",
 ];
 
 export default function Landing() {
@@ -121,16 +128,17 @@ export default function Landing() {
         <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 md:grid-cols-2 md:py-24">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full bg-primary-soft px-3 py-1 text-xs font-medium text-primary-strong">
-              <Sparkles className="h-3.5 w-3.5" /> Ganadería extensiva · Primera versión disponible
+              <Sparkles className="h-3.5 w-3.5" /> Software de gestion ganadera · Primera version disponible
             </span>
             <h1 className="mt-4 text-4xl font-bold leading-tight tracking-tight md:text-5xl">
-              La gestión diaria de tu
+              La gestion diaria de tu
               <br />
-              explotación, <span className="text-primary">desde el móvil</span>.
+              explotacion ganadera, <span className="text-primary">desde el movil</span>.
             </h1>
             <p className="mt-4 text-lg text-muted-foreground">
-              Animales, lotes, fincas, partos, tratamientos, gastos y documentos en un solo sitio. Sin cuadernos, sin
-              Excel y sin volver a casa para apuntarlo.
+              GanaderOS es un programa para ganaderos que une animales por crotal, lotes, fincas, partos,
+              tratamientos, gastos y documentos en un solo sitio. Sin cuadernos, sin Excel y sin volver a casa para
+              apuntarlo.
             </p>
             <div className="mt-6 flex flex-wrap gap-3">
               <Link to="/auth">
@@ -146,7 +154,7 @@ export default function Landing() {
             </div>
             <div className="mt-6 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
               <span className="inline-flex items-center gap-1">
-                <Check className="h-3.5 w-3.5 text-primary" /> Pensado para usar en el campo
+                <Check className="h-3.5 w-3.5 text-primary" /> App para usar en el campo
               </span>
               <span className="inline-flex items-center gap-1">
                 <Check className="h-3.5 w-3.5 text-primary" /> Cancela cuando quieras
@@ -173,8 +181,8 @@ export default function Landing() {
       {/* CÓMO FUNCIONA */}
       <section id="como-funciona" className="mx-auto max-w-6xl px-4 py-16">
         <div className="mb-10 text-center">
-          <h2 className="text-3xl font-bold tracking-tight">Cómo funciona</h2>
-          <p className="mt-2 text-muted-foreground">3 pasos. Sin manuales ni formación.</p>
+          <h2 className="text-3xl font-bold tracking-tight">Como funciona</h2>
+          <p className="mt-2 text-muted-foreground">Un cuaderno de explotacion ganadera digital en 3 pasos.</p>
         </div>
         <div className="grid gap-6 md:grid-cols-3">
           {steps.map((s) => (
@@ -195,9 +203,9 @@ export default function Landing() {
       <section id="features" className="bg-secondary/40">
         <div className="mx-auto max-w-6xl px-4 py-16">
           <div className="mb-10 text-center">
-            <h2 className="text-3xl font-bold tracking-tight">Todo lo que pasa en la explotación</h2>
+            <h2 className="text-3xl font-bold tracking-tight">Todo lo que pasa en la explotacion</h2>
             <p className="mt-2 text-muted-foreground">
-              Cada animal con su historia completa: de dónde viene, qué le has hecho y dónde está.
+              Cada animal con su historia completa: de donde viene, que le has hecho y donde esta.
             </p>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -225,7 +233,7 @@ export default function Landing() {
             </div>
             <h2 className="text-3xl font-bold tracking-tight">Apunta lo que pasa cuando pasa</h2>
             <p className="mt-3 text-muted-foreground">
-              Con las manos sucias y sin cobertura buena, lo último que apetece es rellenar formularios largos. En
+              Con las manos sucias y sin cobertura buena, lo ultimo que apetece es rellenar formularios largos. En
               GanaderOS registras un evento en dos toques.
             </p>
             <ul className="mt-6 space-y-4">
@@ -276,6 +284,27 @@ export default function Landing() {
                 <div className="text-muted-foreground">Crías dadas de alta automáticamente</div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-secondary/40">
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          <div className="mb-8 max-w-3xl">
+            <h2 className="text-3xl font-bold tracking-tight">Software ganadero pensado para explotaciones reales</h2>
+            <p className="mt-3 text-muted-foreground">
+              GanaderOS ayuda a digitalizar el dia a dia de la explotacion sin complicar el trabajo: control de
+              animales, sanidad, reproduccion, economia y documentos en una herramienta clara para ganaderos y
+              gestorías.
+            </p>
+          </div>
+          <div className="grid gap-3 md:grid-cols-2">
+            {seoBenefits.map((benefit) => (
+              <div key={benefit} className="flex items-start gap-3 rounded-lg border bg-card p-4 text-sm shadow-card">
+                <Check className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+                <span>{benefit}</span>
+              </div>
+            ))}
           </div>
         </div>
       </section>

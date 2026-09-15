@@ -14,7 +14,7 @@ export default function Privacidad() {
         <li><strong>Titular:</strong> Diego Serrano Retamosa</li>
         <li><strong>NIF:</strong> 76046662Z</li>
         <li><strong>Domicilio:</strong> C/ Paseo de Extremadura, Herguijuela (Cáceres), España</li>
-        <li><strong>Email de contacto:</strong> contacto@papeleofacil.com</li>
+        <li><strong>Email de contacto:</strong> contacto@ganaderoos.com</li>
       </ul>
 
       <h2>2. Datos que recogemos</h2>
@@ -22,17 +22,18 @@ export default function Privacidad() {
       <ul>
         <li>Nombre, email, teléfono.</li>
         <li>Datos fiscales: NIF/CIF, razón social, dirección fiscal.</li>
-        <li>Datos de la empresa: serie de facturación, IVA/IRPF por defecto.</li>
-        <li>Número de WhatsApp (para vincular la cuenta al bot).</li>
+        <li>Datos de la explotación: nombre, código REGA, ubicación, especie principal y configuración operativa.</li>
+        <li>Datos ganaderos: animales, crotales, lotes, fincas, parcelas, eventos sanitarios, partos, tratamientos, pesajes, tareas, documentos, gastos e ingresos.</li>
+        <li>Número de WhatsApp (para vincular la cuenta al bot ganadero).</li>
         <li>Datos de pago gestionados por Stripe (no almacenamos números de tarjeta).</li>
         <li>Datos técnicos: dirección IP, navegador, logs de acceso.</li>
       </ul>
-      <h3>Datos de clientes del usuario (a efectos de facturación)</h3>
+      <h3>Datos de clientes, proveedores o terceros vinculados a la explotación</h3>
       <ul>
         <li>Nombre o razón social, NIF/CIF.</li>
         <li>Dirección fiscal, código postal, ciudad, provincia.</li>
         <li>Email y teléfono de contacto.</li>
-        <li>Histórico de facturas y cobros emitidos.</li>
+        <li>Histórico de facturas, cobros, gastos, ingresos y documentos asociados.</li>
       </ul>
       <p>
         Respecto a los datos de los clientes finales, el usuario actúa como <strong>responsable del
@@ -42,11 +43,11 @@ export default function Privacidad() {
 
       <h2>3. Finalidad del tratamiento</h2>
       <ul>
-        <li>Prestar el servicio de generación, envío y gestión de facturas.</li>
+        <li>Prestar el servicio de gestión ganadera digital.</li>
         <li>Gestionar la relación contractual y la facturación de la suscripción.</li>
         <li>Procesar pagos a través de Stripe.</li>
         <li>Permitir la interacción con el usuario vía WhatsApp (API de Meta).</li>
-        <li>Procesar imágenes de tickets mediante OCR para registrar gastos.</li>
+        <li>Procesar imágenes de crotales, tickets, facturas y documentos mediante OCR o IA.</li>
         <li>Enviar comunicaciones técnicas o relacionadas con el servicio.</li>
         <li>Cumplir con obligaciones legales (conservación de facturas, etc.).</li>
         <li>Enviar comunicaciones comerciales sobre el servicio (solo con consentimiento).</li>
